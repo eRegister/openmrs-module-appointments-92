@@ -15,10 +15,8 @@ public interface AppointmentStatusMarkerService {
 
     List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime);
 
-    //@Transactional
     void markAppoinmentAsComplete(String uuid);
 
-    //@Transactional
     void markAllMissedAppointments(Date startDateTime, Date endDateTime);
 
     void markPatientFutureAppointments(Patient patient, AppointmentService appointmentService, Date startDateTime);
@@ -27,4 +25,5 @@ public interface AppointmentStatusMarkerService {
 
     Date schedulerEndDateTime();
 
+    String concatenateUuidList(List<String> uuidList);
 }

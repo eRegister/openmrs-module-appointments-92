@@ -13,9 +13,7 @@ public interface AppointmentStatusMarkerDao {
 
     List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDate);
 
-    //@Transactional
     void markAppoinmentAsComplete(String uuid);
 
-    //@Transactional
     void markAllMissedAppointments(String concatenatedUuidList);
 }
