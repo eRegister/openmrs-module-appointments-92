@@ -1,0 +1,13 @@
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentsControllerTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/mapper/AppointmentMapperTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentServiceControllerTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentsControllerIT.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentControllerIT.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentServicesControllerIT.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/mapper/AppointmentServiceMapperTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/SpecialityControllerIT.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentServicesControllerTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentControllerTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/controller/AppointmentServiceControllerIT.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/BaseIntegrationTest.java
+/home/junior/workspace/openmrs-module-appointments-92/omod/src/test/java/org/openmrs/module/appointments/web/BaseWebControllerTest.java
