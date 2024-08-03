@@ -13,13 +13,13 @@ public interface AppointmentStatusMarkerService {
 
     List<String> getAllAppointmentsNotConsultedUuidList(Date startDateTime, Date endDateTime);
 
-    List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime);
+    List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime, Date endDateTime);
 
     void markAppoinmentAsComplete(String uuid);
 
     void markAllMissedAppointments(Date startDateTime, Date endDateTime);
 
-    void markPatientFutureAppointments(Patient patient, AppointmentService appointmentService, Date startDateTime);
+    void markPatientFutureAppointments(Patient patient, AppointmentService appointmentService, Date startDateTime, Date endDateTime);
 
     Date schedulertStartDateTime(int minusDays);
 

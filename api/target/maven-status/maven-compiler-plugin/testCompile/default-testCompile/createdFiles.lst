@@ -13,8 +13,8 @@ org/openmrs/module/appointments/validator/impl/DefaultAppointmentValidatorTest.c
 org/openmrs/module/appointments/dao/impl/AppointmentServiceDaoImplIT.class
 org/openmrs/module/appointments/service/impl/AppointmentsServiceImplTest.class
 org/openmrs/module/appointments/service/SpecialityServiceTest.class
-org/openmrs/module/appointments/scheduler/tasks/MarkAppointmentAsMissedTaskTest.class
 org/openmrs/module/appointments/service/impl/AppointmentServiceServiceImplTest.class
+org/openmrs/module/appointments/scheduler/tasks/MarkAppointmentAsMissedTaskTest.class
 org/openmrs/module/appointments/service/AppointmentServiceServiceTest.class
 org/openmrs/module/appointments/dao/impl/SpecialityDaoImplIT.class
 org/openmrs/module/appointments/service/impl/SpecialityServiceImplTest.class

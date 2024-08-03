@@ -39,13 +39,14 @@ public class AppointmentStatusMarkerDaoImpl implements AppointmentStatusMarkerDa
     }
 
     @Override
-    public List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime) {
+    public List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime, Date endDateTime) {
         Query query = sessionFactory.getCurrentSession()
                 .createQuery("SELECT a.uuid FROM Appointment a WHERE a.service=:appointmentService AND a.patient=:patient " +
-                        "AND a.startDateTime>=:startDateTime");
+                        "AND a.startDateTime>=:startDateTime AND a.endDateTime<:endDateTime");
         query.setParameter("appointmentService", appointmentService);
         query.setParameter("patient", patient);
         query.setDate("startDateTime", startDateTime);
+        query.setDate("endDateTime", endDateTime);
 
         List<String> futureAppoinmentsUuidList = (List<String>) query.list();
         return futureAppoinmentsUuidList;

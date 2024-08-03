@@ -8,8 +8,8 @@ org/openmrs/module/appointments/web/controller/AppointmentServiceControllerIT$1.
 org/openmrs/module/appointments/web/BaseWebControllerTest$Parameter.class
 org/openmrs/module/appointments/web/controller/AppointmentServicesControllerIT$1.class
 org/openmrs/module/appointments/web/controller/AppointmentsControllerTest.class
-org/openmrs/module/appointments/web/controller/AppointmentControllerIT$1.class
 org/openmrs/module/appointments/web/controller/AppointmentServiceControllerIT$4.class
+org/openmrs/module/appointments/web/controller/AppointmentControllerIT$1.class
 org/openmrs/module/appointments/web/controller/AppointmentServicesControllerIT.class
 org/openmrs/module/appointments/web/controller/AppointmentServiceControllerTest.class
 org/openmrs/module/appointments/web/controller/AppointmentControllerIT$2.class

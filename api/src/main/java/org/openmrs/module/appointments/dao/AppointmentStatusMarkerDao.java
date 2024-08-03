@@ -11,7 +11,7 @@ public interface AppointmentStatusMarkerDao {
 
     List<String> getAllAppointmentsNotConsultedUuidList(Date startDateTime, Date endDateTime);
 
-    List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDate);
+    List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDate, Date endDate);
 
     void markAppoinmentAsComplete(String uuid);
 

@@ -30,8 +30,8 @@ public class AppointmentStatusMarkerServiceImpl implements AppointmentStatusMark
     }
 
     @Override
-    public List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime) {
-        return appointmentStatusMarkerDao.getPatientFutureAppointmentUuidList(patient, appointmentService, startDateTime);
+    public List<String> getPatientFutureAppointmentUuidList(Patient patient, AppointmentService appointmentService, Date startDateTime, Date endDateTime) {
+        return appointmentStatusMarkerDao.getPatientFutureAppointmentUuidList(patient, appointmentService, startDateTime, endDateTime);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class AppointmentStatusMarkerServiceImpl implements AppointmentStatusMark
     }
 
     @Override
-    public void markPatientFutureAppointments(Patient patient, AppointmentService appointmentService, Date startDateTime) {
-        List<String> patientFutureAppointmentsUuid = getPatientFutureAppointmentUuidList(patient, appointmentService, startDateTime);
+    public void markPatientFutureAppointments(Patient patient, AppointmentService appointmentService, Date startDateTime, Date endDateTime) {
+        List<String> patientFutureAppointmentsUuid = getPatientFutureAppointmentUuidList(patient, appointmentService, startDateTime, endDateTime);
 
         patientFutureAppointmentsUuid.forEach(this::markAppoinmentAsComplete);
     }
