@@ -1,100 +1,97 @@
-# -------------------------------
-# Workflow Name
-# -------------------------------
-# This name appears in the GitHub Actions tab of your repository.
+# --------------------------------------------------
+# Workflow: Build and Release OMOD Artifacts
+# --------------------------------------------------
+# This workflow builds your OpenMRS module (both API and OMOD),
+# then uploads the built OMOD artifacts to a separate GitHub repository.
+# It runs automatically on pushes to 'main' or can be triggered manually.
+# --------------------------------------------------
+
 name: Build and Release OMOD Artifacts
 
-# -------------------------------
-# Trigger Conditions
-# -------------------------------
 on:
   push:
-    branches: [ main ]          # Automatically runs when code is pushed to the 'main' branch
-  workflow_dispatch:            # Allows manual triggering from the GitHub Actions UI
+    branches: [ main ]          # Automatically runs when you push code to 'main'
+  workflow_dispatch:            # Allows you to trigger the workflow manually
 
-# -------------------------------
-# Job Definitions
-# -------------------------------
 jobs:
-  build-and-release:            # The single job in this workflow
-    runs-on: ubuntu-latest      # Runs the job on the latest Ubuntu virtual machine provided by GitHub
+  build-and-release:
+    runs-on: ubuntu-latest      # Use the latest Ubuntu runner image
     
     steps:
-    # -------------------------------
+    # --------------------------------------------------
     # Step 1: Checkout source code
-    # -------------------------------
+    # --------------------------------------------------
     - name: Checkout source code
-      uses: actions/checkout@v4 # Fetches your repository's code so other steps can access it
+      uses: actions/checkout@v4 # Pulls your repository files into the runner environment
       
-    # -------------------------------
-    # Step 2: Setup Java and Maven
-    # -------------------------------
+    # --------------------------------------------------
+    # Step 2: Setup Java + Maven
+    # --------------------------------------------------
     - name: Setup Java and Maven
       uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'    # Installs the Zulu (OpenJDK) distribution of Java
-        java-version: '8'       # Sets the Java version to 8 (required by most OpenMRS modules)
-        
-    # -------------------------------
-    # Step 3: Setup Maven via SDKMAN
-    # -------------------------------
-    - name: Setup Maven
+        distribution: 'zulu'        # Use Azul Zulu OpenJDK (stable and widely used)
+        java-version: '8'           # OpenMRS modules require Java 8 to build successfully
+        cache: 'maven'              # Cache Maven dependencies between runs for faster builds
+        maven-version: '3.6.3'      # Use Maven 3.6.3 (older version that supports HTTP repos)
+
+    # --------------------------------------------------
+    # Step 3: Verify setup versions
+    # --------------------------------------------------
+    - name: Verify Java and Maven versions
       run: |
-        # Installs SDKMAN (a tool to manage versions of Java, Maven, Gradle, etc.)
-        curl -s "https://get.sdkman.io" | bash
+        echo "=== Java Version ==="
+        java -version               # Prints the Java version in use
+        echo "=== Maven Version ==="
+        mvn -v                      # Prints the Maven version and confirms it's 3.6.3
         
-        # Loads SDKMAN into the current shell session
-        source "$HOME/.sdkman/bin/sdkman-init.sh"
-        
-        # Installs a specific version of Maven (3.6.3) to ensure consistency
-        sdk install maven 3.6.3
-        
-    # -------------------------------
+    # --------------------------------------------------
     # Step 4: Build API module
-    # -------------------------------
+    # --------------------------------------------------
     - name: Build API module
       run: |
-        cd api/                   # Move into the API submodule directory
-        mvn clean install -DskipTests  # Clean previous builds and compile the module, skipping tests
+        cd api/                     # Navigate into the API submodule directory
+        mvn clean install -DskipTests  # Clean previous builds and compile API module (skip tests for speed)
         
-    # -------------------------------
-    # Step 5: Build main module
-    # -------------------------------
+    # --------------------------------------------------
+    # Step 5: Build main module (produces the .omod file)
+    # --------------------------------------------------
     - name: Build main module
       run: |
-        mvn clean install -DskipTests  # Build the main module (which packages everything into the OMOD)
+        mvn clean install -DskipTests  # Build the main module which packages the OMOD
         
-    # -------------------------------
-    # Step 6: Upload built OMOD to release repository
-    # -------------------------------
+    # --------------------------------------------------
+    # Step 6: Upload to Release Repository
+    # --------------------------------------------------
     - name: Upload to Release Repository
       env:
-        GH_TOKEN: ${{ secrets.GH_PAT }}  # Pulls your GitHub Personal Access Token (PAT) from repository secrets
+        GH_TOKEN: ${{ secrets.GH_PAT }}  # Personal Access Token stored in GitHub Secrets (used for authentication)
       run: |
-        # -------------------------------------
+        # --------------------------------------------------
         # 1. Clone the release repository
-        # -------------------------------------
-        # This is a separate repo that will only store built OMOD files.
-        git clone https://$GH_TOKEN@github.com/petershale21/openmrs-module-appointments-92-release.git release-repo
+        # --------------------------------------------------
+        # This is a separate repository dedicated to storing built OMOD artifacts.
+        git clone https://$GH_TOKEN@github.com/your-username/openmrs-module-appointments-92-release.git release-repo
         
-        # -------------------------------------
-        # 2. Clean out the old contents
-        # -------------------------------------
+        # --------------------------------------------------
+        # 2. Clean out old contents from the release repo
+        # --------------------------------------------------
         cd release-repo
-        git rm -rf . || true      # Remove all tracked files
-        git clean -fd || true     # Remove any untracked files and directories
+        git rm -rf . || true        # Remove all tracked files (ignore errors if none)
+        git clean -fd || true       # Remove untracked files and folders
         
-        # -------------------------------------
+        # --------------------------------------------------
         # 3. Copy the new OMOD build artifacts
-        # -------------------------------------
-        # Copies everything built under omod/target into the release repo
+        # --------------------------------------------------
+        # Copies everything from omod/target (where the new OMOD is built)
+        # into the root of the release repository.
         cp -r ../omod/target/* . || true
         
-        # -------------------------------------
-        # 4. Commit and push changes
-        # -------------------------------------
-        git config user.name "GitHub Actions"   # Set commit author name
-        git config user.email "actions@github.com"  # Set commit author email
-        git add .                               # Stage all files
-        git commit -m "Update OMOD artifacts: ${{ github.ref_name }}"  # Commit changes with branch name in message
-        git push                                # Push to the release repository
+        # --------------------------------------------------
+        # 4. Commit and push the updated artifacts
+        # --------------------------------------------------
+        git config user.name "GitHub Actions"      # Set commit author name
+        git config user.email "actions@github.com" # Set commit author email
+        git add .                                 # Stage all new files
+        git commit -m "Update OMOD artifacts: ${{ github.ref_name }}"  # Commit with branch info
+        git push                                  # Push changes to the release repo
