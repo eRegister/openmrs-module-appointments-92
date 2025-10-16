@@ -7,6 +7,8 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.PersonName;
 import org.openmrs.Provider;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
@@ -47,7 +49,12 @@ public class AppointmentMapper {
     AppointmentResponseExtension appointmentResponseExtension;
 
     public List<AppointmentDefaultResponse> constructResponse(List<Appointment> appointments) {
-        return appointments.stream().map(as -> this.mapToDefaultResponse(as, new AppointmentDefaultResponse())).collect(Collectors.toList());
+        return appointments.stream()
+        .filter(appointment -> {
+            Patient patient = appointment.getPatient();
+            return patient != null && !patient.getVoided();  //Filter out appointments with null and/or voided patients
+        })
+        .map(as -> this.mapToDefaultResponse(as, new AppointmentDefaultResponse())).collect(Collectors.toList());
     }
 
     public AppointmentDefaultResponse constructResponse(Appointment appointment) {
@@ -148,14 +155,37 @@ public class AppointmentMapper {
 
     private Map createPatientMap(Patient p) {
         Map map = new HashMap();
-        map.put("name", p.getPersonName().getFullName());
-        map.put("uuid", p.getUuid());
-        map.put("identifier", p.getPatientIdentifier().getIdentifier());
         
-        if(p.getPatientIdentifier("HIV Program ID") != null)
-        map.put("hivIdentifier", p.getPatientIdentifier("HIV Program ID").getIdentifier());
-        if(p.getPatientIdentifier("New HIV Program ID") != null)
-        map.put("newHivIdentifier", p.getPatientIdentifier("New HIV Program ID").getIdentifier());
+        // Null safe person name access (to ensure that an exception is not thrown if no name exists) 
+        PersonName personName = p.getPersonName();
+        if (personName != null) {
+            map.put("name", personName.getFullName());
+        } else {
+            map.put("name", "Unknown");
+        }
+        
+        map.put("uuid", p.getUuid());
+        
+        // Null safe primary identifier access
+        PatientIdentifier primaryIdentifier = p.getPatientIdentifier();
+        if (primaryIdentifier != null) {
+            map.put("identifier", primaryIdentifier.getIdentifier());
+        } else {
+            map.put("identifier", "No ID");
+        }
+        
+        // Null safe HIV identifier access
+        PatientIdentifier hivIdentifier = p.getPatientIdentifier("HIV Program ID");
+        if (hivIdentifier != null) {
+            map.put("hivIdentifier", hivIdentifier.getIdentifier());
+        }
+        
+        // Null safe New HIV identifier access  
+        PatientIdentifier newHivIdentifier = p.getPatientIdentifier("New HIV Program ID");
+        if (newHivIdentifier != null) {
+            map.put("newHivIdentifier", newHivIdentifier.getIdentifier());
+        }
+        
         return map;
     }
 }
