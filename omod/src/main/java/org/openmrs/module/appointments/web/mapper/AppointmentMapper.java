@@ -156,7 +156,7 @@ public class AppointmentMapper {
     private Map createPatientMap(Patient p) {
         Map map = new HashMap();
         
-        // Null safe person name access 
+        // Null safe person name access (to ensure that an exception is not thrown if no name exists) 
         PersonName personName = p.getPersonName();
         if (personName != null) {
             map.put("name", personName.getFullName());
